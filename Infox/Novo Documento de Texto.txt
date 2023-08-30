@@ -1,0 +1,35 @@
+Telas
+
+Login - conectada ao banco tbUsers
+
+tela principal 
+opções
+Cadastro
+ -cliente
+ -OS
+ -Usuário
+
+Relatório
+ -Clientes
+ -Serviços
+Ajuda 
+ - sobre
+
+Opções 
+ - sair 
+ - logout
+Tela inicial será mostrado o usuário que está logado a data, fundo ainda a definir o que será posto
+
+Castro - Cliente
+	Campo para listar os clientes por busca
+	CRUD
+	  =id
+	  -NOme
+	  =Endereco
+	  =telefone
+	  =Email
+	botões cadastrar /editar /excluir
+
+Cadastro - OS
+	Campos para busca de cadastro vincular os clientes e os dados para cadatrar
+	  Equipmaneto - defeito - serviço - tecnico  valor total - situação - nos data = opçoes orcamento / ordem de serviço
