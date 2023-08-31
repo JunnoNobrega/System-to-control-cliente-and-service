@@ -1,4 +1,4 @@
-var User = require("../models/User");
+var Client = require("../models/Client");
 var PasswordToken = require("../models/PasswordToken");
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcrypt");
@@ -16,11 +16,7 @@ class UserController {
         res.json(users);
     }
     // lista os clientes
-    async listclient(req, res) {
 
-        var users = await User.findAllClient();
-        res.json(users);
-    }
     //Busca por id
     async findUser(req,res){
         var id = req.params.id;
