@@ -11,7 +11,7 @@
         <ul class="menu-list">
           <li>
             <a @click="showMenuCad">Cadastro ></a>
-            <a v-if="showedMenuCad">Cliente</a>
+            <a v-if="showedMenuCad" @click="showModal =true">Cliente</a>
             <a v-if="showedMenuCad">Os</a>
             <a v-if="showedMenuCad">Usuários</a>
           </li>
@@ -49,6 +49,8 @@
       <table class="table  is-bordered">
           <thead>
           <h2>Clientes cadastrados</h2>
+          
+      
             <tr>
               <th> Id</th>
               <th>Nome</th>
@@ -76,7 +78,38 @@
             
         </tbody>
       </table>
-        <button class="button is-success">Cadastrar novo</button>
+        <button class="button is-success" @click="showModal =true">Cadastrar novo</button>
+        
+
+            <div :class="{modal: true, 'is-active':showModal}">
+                <div class="modal-background">
+                  
+                </div>
+
+                <div class="modal-content">
+                    <div class="box">
+                    <h1>Cadastrar novo Cliente: </h1>
+                                      <div v-if="showSuccessMessage">
+                              <div class="notification is-success">
+                                  <p>Usuário cadastrado com sucesso</p>
+                              </div>
+                            </div>
+                    <p>Nome</p>
+                    <input type="text" v-model="showModalData.nomecli" placeholder="digite o nome do usuário" class="input">
+                    <p>Endereço</p>
+                    <input type="text" v-model="showModalData.endcli" placeholder="digite o endereço" class="input">
+                    <p>Fone</p>
+                    <input type="tel" v-model="showModalData.foneclie" placeholder="digite o telefone" class="input">
+                    <p>Email</p>
+                    <input type="email" v-model="showModalData.emailcli" placeholder="digite o Email" class="input">
+                    <button class="button is-success is-fullwidth" @click="createClient()">Cadastrar novo client</button><br>
+                    <button class="button is-danger is-fullwidth" @click="showModal =false">Cancelar</button>
+                </div>
+              </div>
+              <button class="modal-close is-large" aria-label="close" @click="showModal =false"></button>
+
+          </div>
+        
     </section>
 
     <!-- the footer will take up all unused space at the bottom -->
@@ -96,11 +129,9 @@ import axios from 'axios';
 export default {
   created(){
       axios.get("http://localhost:8686/client").then(res =>{
-        
-        console.log(res);
         this.users = res.data;
         this.name = localStorage.getItem('name');
-        console.log(this.name)
+
       }).catch(err =>{
         console.log(err);
       });
@@ -111,7 +142,15 @@ export default {
       name: '',
       users: [],
       showedMenuCad: false,
-      showedMenuRel: false
+      showedMenuRel: false,
+      showModal: false,
+      showModalData: {
+        nomecli: '',
+        endcli: '',
+        foneclie: '',
+        emailcli: '',
+        showSuccessMessage: false,
+      },
     }
   },
   methods: {
@@ -120,11 +159,39 @@ export default {
     },
     showMenuRel(){
       this.showedMenuRel = !this.showedMenuRel
+    },
+    createClient(){
+      axios.post("http://localhost:8686/client", this.showModalData).then( res => {
+          console.log(res)
+          this.showSuccessMessage = true;
+          this.showModalData.nomecli = '';
+          this.showModalData.endcli = '';
+          this.showModalData.foneclie = '';
+          this.showModalData.emailcli = '';
+          setTimeout(() => {
+            this.showSuccessMessage = false;
+            this.showModal = false;
+            this.fetchClient()
+          }, 2000);
+      }).catch (err => {
+        console.log(err);
+      })
+    },
+    fetchClient(){
+      axios.get("http://localhost:8686/client").then(res =>{
+        this.users = res.data;
+        this.name = localStorage.getItem('name');
+
+      }).catch(err =>{
+        console.log(err);
+      });
     }
   }
 }
-</script>
 
+
+
+</script>
 <style scoped>
 
 h1 {
