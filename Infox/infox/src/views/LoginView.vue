@@ -44,17 +44,15 @@ export default {
     }
   },
   methods: {
+    //LOGIN FUNCTION
     login(){
         axios.post("http://localhost:8686/login",{
+          //Objetc login data
         email: this.email,
         password: this.password,
         
-        
       }).then(res =>{
-          
-          console.log(this.name),
-          console.log(this.password)
-        console.log(res)
+       
         localStorage.setItem('token',res.data.token);
         localStorage.setItem('name',res.data.name);
         this.$router.push({name : 'home'})

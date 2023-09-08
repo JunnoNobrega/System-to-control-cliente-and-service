@@ -56,10 +56,11 @@ class ClientController {
     //edição de usuário
 
     async edit(req,res){
-        var {idcli,nomeclie,endcli,foneclie,emailcli} = req.body;
-        var result = await Client.update(idcli,nomeclie,endcli,foneclie,emailcli);
+        var {idcli,nomecli,endcli,foneclie,emailcli} = req.body;
+      
+        var result = await Client.update(idcli,nomecli,endcli,foneclie,emailcli);
         if(result != undefined){
-            if(result.status){
+            if(result.status ==true){
                 res.status(200);
                 res.send("Tudo OK! ");
             }else{

@@ -1,6 +1,7 @@
 var knex = require("../database/connection");
 var bcrypt = require("bcrypt");
 const PasswordToken = require("./PasswordToken");
+const e = require("express");
 
 class Client {
 
@@ -50,7 +51,6 @@ class Client {
     async new(nomecli,endcli,foneclie,emailcli) {
 
         try {
-
             await knex.insert({ nomecli,endcli,foneclie,emailcli}).table("tbclientes");
 
         } catch (error) {
@@ -61,7 +61,7 @@ class Client {
     // faz uma consulta no banco de dados para ver se o email cadastrado já existe
     async findEmail(emailcli){
         try{
-            var result = await knex.select("*").from("tbclientes").where({emailcli: emailcli}); // busca no banco knex.js
+            var result = await knex.select("*").from("tbclientes").where({emailcli:emailcli}); // busca no banco knex.js
             // se ja existir a busca retorna um array
             // se o array for m ais que 0 significa que já tem
             if(result.length > 0){
@@ -69,33 +69,38 @@ class Client {
             }else{
                 return false;  // email não encontrado
             }
-            console.log(result);
         }catch(err){
             console.log(err);
             return false;
         }
     }
     // edição de usuário
-    async update(idcli,nomecli, endcli,foneclie,emailcli){
+    async update(idcli,nomecli,endcli,foneclie,emailcli){
         var user = await this.findById(idcli);
         if (user != undefined) {
-            
             var editUser = {};
+                    
             // verifica se o email já existe
-            if (emailcli != undefined) {
-                if (emailcli != user.emailcli) {
+            if (emailcli != undefined) { // ver se o email é diferente de undefined
+                if (emailcli != user.emailcli) { // ver se é difernte do email buscado
                     var result = await this.findEmail(emailcli);
                     if(result == false){
-                        editUser.emailcli = emailcli; // Caso não encontro email será cadastrado
-                    }
-                }else {
-                    return {status: false}
-                    
+                        editUser.emailcli = emailcli; // Caso não encontre o email será cadastrado
+                        
+                    }else {
+                        return {status: true, err: "Email já cadastrado no sistema!"}
+                     }       
                 }
             }
-
+            //verifica se o nome é vazio
             if(nomecli != undefined){
-                editUser.namecli = nomecli;
+                editUser.nomecli = nomecli;
+            }
+            if(endcli != undefined){
+                editUser.endcli = endcli;
+            }
+            if(foneclie != undefined){
+                editUser.foneclie = foneclie;
             }
     
             // atualiza os dados
@@ -103,7 +108,8 @@ class Client {
                 await knex.update(editUser).where({idcli:idcli}).table("tbclientes");
                 return {status: true}
             }catch (err) {
-                return {status: false, err: "O Email já está cadastrado"}
+                console.log(err)
+                return {status: false, err: "O Email já está cadastrado! "}
             }
 
         } else {

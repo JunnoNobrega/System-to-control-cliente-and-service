@@ -1,4 +1,4 @@
-var Client = require("../models/Client");
+var User = require("../models/User");
 var PasswordToken = require("../models/PasswordToken");
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcrypt");
