@@ -4,7 +4,7 @@ var router = express.Router();
 var HomeController = require("../controllers/HomeController");
 var UserController = require('../controllers/UserController');
 var ClientController = require('../controllers/ClientController');
-
+var OsController = require("../controllers/OsController");
 var AdminAuth = require("../middleware/AdminAuth");
 //Routes Users
 router.get('/', HomeController.index);
@@ -25,5 +25,9 @@ router.put("/client",  ClientController.edit); // rota para editar usuário
 router.delete("/client/:idcli",/*AdminAuth,*/  ClientController.remove); //rota para remover usuário
 router.post('/client', ClientController.create); // rota de criação de usuário
 module.exports = router;
+
+
+// Routes tb os
+router.get("/os", OsController.listos); // listar
 
 /**/

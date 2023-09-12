@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
+import OsView from '../views/OsView.vue'
 import HomeView from '../views/HomeView.vue'
 
 const routes = [
@@ -9,10 +10,16 @@ const routes = [
     component: LoginView
   },
   {
-    patch: '/',
+    path: '/os',
+    name: 'os',
+    component: OsView
+  },
+  {
+    path: '/',
     name: 'home',
     component: HomeView
-  }
+  },
+  
 ]
 
 const router = createRouter({

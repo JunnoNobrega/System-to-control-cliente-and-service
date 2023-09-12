@@ -10,7 +10,8 @@
                 <li>
                   <a @click="showMenuCad">Cadastro ></a>
                   <a v-if="showedMenuCad" @click="showModalCreate =true">Cliente</a>
-                  <a v-if="showedMenuCad">Os</a>
+                  <a v-if="showedMenuCad"> <router-link :to="{name: 'os'}">Os</router-link></a>
+                  
                   <a v-if="showedMenuCad">Usuários</a>
                 </li>
                 <li>
