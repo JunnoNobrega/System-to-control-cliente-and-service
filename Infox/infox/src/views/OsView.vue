@@ -5,13 +5,12 @@
         <!-- left panel -->
         <div class="dashboard-panel is-small is-small">
               <aside class="menu">
-  
                 <ul class="menu-list">
                   <li>
-                    <a @click="showMenuCad">Cadastro ></a>
-                    <a v-if="showedMenuCad" @click="showModalCreate =true">Cliente</a>
-                    <a v-if="showedMenuCad">Os</a>
-                    <a v-if="showedMenuCad">Usuários</a>
+                  
+                    <router-link :to="{name: 'home'}">Cadastro de Cliente</router-link> 
+                    <router-link :to="{name: 'os'}">Cadastro de OS</router-link> 
+
                   </li>
                   <li>
                     <a @click="showMenuRel">Relatório ></a>
@@ -24,12 +23,12 @@
                 </ul>
               
               </aside>
-        </div>
+        </div><!--Dashboarda-panel END-->
       <!--END left panel -->
       <!-- main section -->
       <div class="dashboard-main is-scrollable">
-        <nav class="navbar ">
-          <ul>
+        <nav class="navbar " >
+          <ul >
             <li>
               <h3>Bem vindo:  </h3>
             </li>
@@ -40,10 +39,12 @@
         </nav>
         <section class="section">
           <label for=""><h4> Busca Ordens de serviços</h4></label><br>
-          <input type="text" placeholder="Buscar clientes cadastrados" class="input ">
+          <input type="text" placeholder="Buscar Ordens de serviços cadastrados" class="input ">
           <button class="button is-info is-fullwidth">Buscar</button>
           <hr>
           <h2 class="cabecalho">Ordens de serviços cadastradas </h2>
+          <button class="button is-success is-fullwidth" @click="showModalCreate =true">Cadastrar nova Ordem de serviço</button>
+          <hr>
           <table class="table  is-bordered">
               <thead>
               <div v-if="showSuccessMessage">
@@ -65,7 +66,7 @@
                 </tr>
               </thead>
               
-            <tbody>
+            <tbody class="is-clipped">
                 <tr v-for="os in oss" :key="os.os">
                   <td>{{ os.os }}</td>
                   <td>{{ os.data_os }}</td>
@@ -78,8 +79,9 @@
                   <td>{{ os.situacao }}</td>
           
                   <td>
-                    <button class="button is-warning is-small is-hovered" @click="editClient(user)">Editar</button> |
-                    <button class="button is-danger is-small is-focused" @click="removeClient(user)">Deletar</button> 
+                    <button class="button is-warning is-small is-hovered" @click="editOs(os)">Editar</button> |
+                    <button class="button is-danger is-small is-focused" @click="removeClient(user)">Deletar</button> |
+                    <button class="button  is-small is-focused" @click="removeClient(user)">Imprimir</button> 
                   </td>
                 </tr>
                 
@@ -87,74 +89,118 @@
           </table>
           <button class="button is-success" @click="showModalCreate =true">Cadastrar novo</button>
             
-            <!-- Modal Create -->
-                <div :class="{modal: true, 'is-active':showModalCreate}">
-                    <div class="modal-background">
-                      
-                    </div>
-  
-                    <div class="modal-content">
-                        <div class="box">
-                        <h1>Cadastrar novo Cliente: </h1>
-                                          <div v-if="showSuccessMessage">
-                                  <div class="notification is-success">
-                                      <p>Usuário cadastrado com sucesso</p>
-                                  </div>
-                                </div>
-                        <p>Nome</p>
-                        <input type="text" v-model="showModalData.nomecli" placeholder="digite o nome do usuário" class="input">
-                        <p>Endereço</p>
-                        <input type="text" v-model="showModalData.endcli" placeholder="digite o endereço" class="input">
-                        <p>Fone</p>
-                        <input type="tel" v-model="showModalData.foneclie" placeholder="digite o telefone" maxlength="14" class="input">
-                        <p>Email</p>
-                        <input type="email" v-model="showModalData.emailcli" placeholder="digite o Email" class="input">
-                        <button class="button is-success is-fullwidth" @click="createClient()">Cadastrar novo cliente</button><br>
-                        <button class="button is-danger is-fullwidth" @click="showModalCreate =false">Cancelar</button>
-                    </div>
-                  </div>
-                  <button class="modal-close is-large" aria-label="close" @click="showModalCreate =false"></button>
+
+          <!-- Modal create -->
+                <div :class="{modal: true, 'is-active is-fullwidth':showModalCreate}">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                  <header class="modal-card-head">
+                    <p class="modal-card-title">Ordem de serviço</p>
+                    <button class="delete" aria-label="close" @click="showModalCreate = false"></button>
+                  </header>
+                  <section class="modal-card-body">
+                    <p>OS</p>
+                    <input class="input" type="number" :value=nextOs disabled>
+                                       
+                    <p>Equipamento</p>
+                    <input class="input"  v-model="showModalData.equipamento" type="text">
+
+                    <p>Defeito</p>
+                    <input class="input" v-model="showModalData.defeito" type="text">
+
+                    <p>Serviço</p>
+                    <Textarea class="textarea" v-model="showModalData.servico" widith="250px" height="250px"></Textarea>
+
+                    <p>Técnico</p>
+                    <select  class="select is-fullwidth" v-model="showModalData.tecnico" id="estado" name="estado">
+                      <option value="Tecnico 1">Tecnico 1</option>
+                      <option value="tecnico 2">Tecnico 2</option>
+                      <option value="técnico 3">Tecnico 3</option>
+                    </select>
+
+                    <p>Valor</p>
+                    <input class="input" v-model="showModalData.valor" type="number">
+                    <hr>
+                    <p>Tipo</p>
+
+                    <input class="radio" v-model="showModalData.tipo" type="radio" id="Orçamento" checked name="tipo" value="Orçamento">
+                    <label class="radio"  >Orçamento</label><br>
+                    <input class="radio"  v-model="showModalData.tipo"  type="radio"  name="tipo" value="OS">
+                    <label class="radio">OS</label><br>
+                    <hr>
+                    <p>Situação</p>
+
+                    <input  class="radio" v-model="showModalData.situacao" type="radio" name="situacao" value="Aceita">
+                    <label class="radio" >Aceita</label><br>
+                    <input  class="radio" type="radio"  checked name="situacao" v-model="showModalData.situacao"  value="Recusada">
+                    <label class="radio" >Recusada</label><br>
+                  </section>
+                  <footer class="modal-card-foot">
+                    <button class="button is-success" @click="createOs()">Save changes</button>
+                    <button class="button" @click="showModalCreate = false">Cancel</button>
+                  </footer>
+                </div>
               </div>
-            <!-- END Modal Create -->
-            <!-- Modal Edit -->
-              <div :class="{modal: true, 'is-active':showModalEdit}">
-                    <div class="modal-background">
-                    </div>
-                    <div class="modal-content">
-                        <div class="box">
-                                  <div v-if="error!=undefined">
-                        <div class="notification is-danger">
-                            <p>{{ error }}</p>
-                        </div>
-                        </div>
-                          <h1>Editar Cliente ID: {{ showModalDataEdit.idcli }} </h1>
-                          <div v-if="showSuccessMessage">
-                              <div class="notification is-success">
-                                <p>Usuário Editado com sucesso</p>
-                              </div>
-                          </div> 
-                          <p>Nome</p>
-                          <input type="text" v-model="showModalDataEdit.nomecli" class="input">
-                          <p>Endereço</p>
-                          <input type="text" v-model="showModalDataEdit.endcli"   class="input">
-                          <p>Fone</p>
-                          <input type="tel" v-model="showModalDataEdit.foneclie" maxlength="14" class="input">
-                          <p>Email</p>
-                          <input type="email" v-model="showModalDataEdit.emailcli" class="input">
-                          <button class="button is-success is-fullwidth" @click="updateClient()">Editar cliente</button><br>
-                          <button class="button is-danger is-fullwidth" @click="showModalEdit =false">Cancelar</button>
-                        </div>
-                    </div>
-                  <button class="modal-close is-large" aria-label="close" @click="showModalEdit =false"></button>
+           <!-- Modal  END create -->
+           <!-- Modal edit -->
+           <div :class="{modal: true, 'is-active is-fullwidth':showModalEdit}">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                  <header class="modal-card-head">
+                    <p class="modal-card-title">Editar Ordem de Serviço</p>
+                    <button class="delete" aria-label="close" @click="showModalEdit = false"></button>
+                  </header>
+                  <section class="modal-card-body">
+                    <p>OS</p>
+                    <input class="input" type="number" :value=nextOs disabled>
+                                       
+                    <p>Equipamento</p>
+                    <input class="input"  v-model="showModalDataEdit.equipamento" type="text">
+
+                    <p>Defeito</p>
+                    <input class="input" v-model="showModalDataEdit.defeito" type="text">
+
+                    <p>Serviço</p>
+                    <Textarea class="textarea" v-model="showModalDataEdit.servico" widith="250px" height="250px"></Textarea>
+
+                    <p>Técnico</p>
+                    <select  class="select is-fullwidth" v-model="showModalDataEdit.tecnico" id="estado" name="estado">
+                      <option value="Tecnico 1">Tecnico 1</option>
+                      <option value="tecnico 2">Tecnico 2</option>
+                      <option value="técnico 3">Tecnico 3</option>
+                    </select>
+
+                    <p>Valor</p>
+                    <input class="input" v-model="showModalDataEdit.valor" type="number">
+                    <hr>
+                    <p>Tipo</p>
+
+                    <input class="radio" v-model="showModalDataEdit.tipo" type="radio" id="Orçamento" checked name="tipo" value="Orçamento">
+                    <label class="radio"  >Orçamento</label><br>
+                    <input class="radio"  v-model="showModalDataEdit.tipo"  type="radio"  name="tipo" value="OS">
+                    <label class="radio">OS</label><br>
+                    <hr>
+                    <p>Situação</p>
+
+                    <input  class="radio" v-model="showModalDataEdit.situacao" type="radio" name="situacao" value="Aceita">
+                    <label class="radio" >Aceita</label><br>
+                    <input  class="radio" type="radio"  checked name="situacao" v-model="showModalData.situacao"  value="Recusada">
+                    <label class="radio" >Recusada</label><br>
+                  </section>
+                  <footer class="modal-card-foot">
+                    <button class="button is-success" @click="updateOs()">Save changes</button>
+                    <button class="button" @click="showModalEdit = false">Cancel</button>
+                  </footer>
+                </div>
               </div>
-            <!--END Modal Edit -->
+           <!-- Modal  END edit -->
         </section>
-      </div>
-        <div class="dashboard-panel is-small rigth">
-            </div>
-            </div>
-        </div>
-        
+      </div><!--Mail dashboard END-->
+      <div class="dashboard-panel is-small rigth"></div>
+            
+      </div><!--Dashboard END-->
+    </div> <!--Content END-->
+          
   </template>
   
   <script>
@@ -164,7 +210,10 @@
         axios.get("http://localhost:8686/os").then(res =>{
           this.oss = res.data;
           this.name = localStorage.getItem('name');
-  
+          const maxOs = Math.max(...this.oss.map(os => os.os));
+        
+        // Defina o próximo valor de OS
+          this.nextOs = maxOs + 1;
         }).catch(err =>{
           console.log(err);
         });
@@ -180,7 +229,6 @@
         showModalEdit: false,
         showModalData: {
           os: 0,
-          data_os: '',
           equipamento: '',
           defeito: '',
           servico: '',
@@ -189,8 +237,16 @@
           tipo: '',
           situacao: '',
         },
+        nextOs: "",
         showModalDataEdit: {
-
+          os: 0,
+          equipamento: '',
+          defeito: '',
+          servico: '',
+          tecnico: '',
+          valor: 0,
+          tipo: '',
+          situacao: '',
       },
         selectedUserId: null,
       }
@@ -203,14 +259,20 @@
         this.showedMenuRel = !this.showedMenuRel
       },
       //Funtion to create a new Client.
-      createClient(){
-        axios.post("http://localhost:8686/client", this.showModalData).then( res => {
+      createOs(){
+        axios.post("http://localhost:8686/os", this.showModalData).then( res => {
             console.log(res)
-            this.showSuccessMessage = true;
-            this.showModalData.nomecli = '';
-            this.showModalData.endcli = '';
-            this.showModalData.foneclie = '';
-            this.showModalData.emailcli = '';
+            console.log( this.showModalData.servico)
+            this.showSuccessMessage = "";
+            this.showModalData.equipamento  = "";
+            this.showModalData.defeito  = "";
+            this.showModalData.servico  = "[]";
+            this.showModalData.tecnico  = "";
+            this.showModalData.valor  = "";
+            this.showModalData.tipo  = "";
+            this.showModalData.situacao  = "";
+
+            
             setTimeout(() => {
               this.showModalCreate = false;
               this.fetchClient()
@@ -222,8 +284,8 @@
       },
       // Funtion to reload data on page.
       fetchClient(){
-        axios.get("http://localhost:8686/client").then(res =>{
-          this.users = res.data;
+        axios.get("http://localhost:8686/os").then(res =>{
+          this.oss = res.data;
           this.name = localStorage.getItem('name');
           console.log(res)
         }).catch(err =>{
@@ -231,22 +293,27 @@
         });
       },
       //Function to take data on model to Edit user.
-      editClient(user){
+      editOs(os){
         this.showModalDataEdit = {
-          idcli: user.idcli,
-          nomecli: user.nomecli,
-          endcli: user.endcli,
-          foneclie: user.foneclie,
-          emailcli: user.emailcli,
-          
+         
+          os: os.os,
+          equipamento: os.equipamento,
+          defeito: os.defeito,
+          servico: os.servico,
+          tecnico: os.tecnico,
+          valor: os.valor,
+          tipo: os.tipo,
+          situacao: os.situacao,
           
         };
         this.showModalEdit = true
+        console.log(this.showModalDataEdit)
       },
       //Funtion to update data on database.
-      updateClient(){
+      updateOs(){
        
-        axios.put("http://localhost:8686/client", this.showModalDataEdit).then(res =>{
+        axios.put("http://localhost:8686/os", this.showModalDataEdit).then(res =>{
+          
           this.showSuccessMessage = true;
           console.log(res)
           setTimeout(() => {
@@ -255,6 +322,7 @@
               this.showSuccessMessage = false;
             }, 2000);
         }).catch(err => {
+          
           console.log(err)
         })
       },
@@ -277,10 +345,15 @@
             console.log(err)
           })
         }
-      }
+      },
     }
   }
+
   </script>
+
+
+
+
   <style scoped>
   
   h1 {
@@ -300,10 +373,12 @@
    
   }
   .content ul :hover {
-  
+    
     color: #024572;
   }
+
   .menu-list a{
+    text-decoration: none;
     color: white;
     border-bottom: 1px solid;
   }
@@ -320,5 +395,11 @@
   }
   .cabecalho {
     margin-bottom: 1%;
+  }
+  .modal-card{
+    widows: inherit;
+    width: 75%;
+    text-align: left;
+    
   }
   </style>

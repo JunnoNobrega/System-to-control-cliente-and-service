@@ -16,7 +16,47 @@ async listos(req, res){
     res.json(os);
 
 }
+async createOs(req,res){
+
+    var {equipamento, defeito, servico, tecnico, valor, idcli, tipo, situacao} = req.body;
+
+    await OService.createOs(equipamento, defeito, servico, tecnico, valor, idcli, tipo, situacao);
+    res.status(200);
+    res.send("Tudo OK!");
+}
+async editOs(req,res){
+    var {os, equipamento, defeito, servico, tecnico, valor, idcli, tipo, situacao} = req.body;
     
+    var result = await OService.edit(os, equipamento, defeito, servico, tecnico, valor, idcli, tipo, situacao);
+    console.log(result)
+    if (result != undefined) {
+        if (result.status == true ){
+            res.status(200);
+            res.send("Tudo OK atualizado com sucesso");
+        }else{
+            res.status(406);
+            res.send(result.error);
+        }
+        
+    } else {
+        es.status(406);
+        res.send(result.error);
+    }
+} 
+   //Busca por id
+   async findOs(req,res){
+    var os = req.params.os;
+ 
+    var os = await OService.findById(os);
+    if (os == undefined) {
+
+        res.status(404);
+        res.json({});
+    } else {
+        res.status(200);
+        res.json(os)
+    }
+}
 }
 
 module.exports = new OsController();

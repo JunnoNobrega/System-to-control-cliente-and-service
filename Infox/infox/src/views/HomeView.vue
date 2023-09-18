@@ -8,11 +8,11 @@
 
               <ul class="menu-list">
                 <li>
-                  <a @click="showMenuCad">Cadastro ></a>
-                  <a v-if="showedMenuCad" @click="showModalCreate =true">Cliente</a>
+                  <router-link :to="{name: 'home'}">Cadastro de Cliente</router-link> 
+                    <router-link :to="{name: 'os'}">Cadastro de OS</router-link> 
                   <a v-if="showedMenuCad"> <router-link :to="{name: 'os'}">Os</router-link></a>
                   
-                  <a v-if="showedMenuCad">Usuários</a>
+
                 </li>
                 <li>
                   <a @click="showMenuRel">Relatório ></a>
@@ -27,6 +27,7 @@
             </aside>
       </div>
     <!--END left panel -->
+    
     <!-- main section -->
     <div class="dashboard-main is-scrollable">
       <nav class="navbar ">
@@ -147,8 +148,8 @@
     </div>
       <div class="dashboard-panel is-small rigth">
           </div>
-          </div>
-      </div>
+    </div>
+  </div>
       
 </template>
 
