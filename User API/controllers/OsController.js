@@ -57,6 +57,22 @@ async editOs(req,res){
         res.json(os)
     }
 }
+//Remoção de usuário
+    async remove(req,res){
+        var os = req.params.os;
+        var result = await OService.delete(os);
+
+        console.log("aqui embaixo")
+        console.log(result)
+
+        if (result.status) {
+            res.status(200);
+            res.send("Tudo OK!");
+        } else {
+            res.status(406);
+            res.send(result.err);
+        }
+    }
 }
 
 module.exports = new OsController();

@@ -131,7 +131,7 @@ class Client {
                 
             }
         }else{
-            return {status: false, err: "O susuário não existe!"}
+            return {status: false, err: "O usuário não existe!"}
         }
     }
 }

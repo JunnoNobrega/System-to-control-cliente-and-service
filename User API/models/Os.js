@@ -67,12 +67,21 @@ class OService {
         }
     }
     // Remove OS
-    async remove(){
-        try {
+    async delete(os){
+        var os = await this.findById(os);
+        
+        if (os != undefined) {
             
-        } catch (error) {
-            
+                try {
+                    await knex.delete().where({os:os}).table("tbos");
+                    return {status: true}
+                } catch (err) {
+                        return {status: false, err: err}
+                }
+        } else {
+            return {status: false, err:"O usuário não existe!"}
         }
+    
     }
 
 }

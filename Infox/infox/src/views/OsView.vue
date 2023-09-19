@@ -80,7 +80,7 @@
           
                   <td>
                     <button class="button is-warning is-small is-hovered" @click="editOs(os)">Editar</button> |
-                    <button class="button is-danger is-small is-focused" @click="removeClient(user)">Deletar</button> |
+                    <button class="button is-danger is-small is-focused" @click="removeOs(os)">Deletar</button> |
                     <button class="button  is-small is-focused" @click="removeClient(user)">Imprimir</button> 
                   </td>
                 </tr>
@@ -161,7 +161,7 @@
                     <input class="input" v-model="showModalDataEdit.defeito" type="text">
 
                     <p>Serviço</p>
-                    <Textarea class="textarea" v-model="showModalDataEdit.servico" widith="250px" height="250px"></Textarea>
+                    <Textarea class="textarea" :value="showModalDataEdit.servico" widith="250px" height="250px"></Textarea>
 
                     <p>Técnico</p>
                     <select  class="select is-fullwidth" v-model="showModalDataEdit.tecnico" id="estado" name="estado">
@@ -313,7 +313,7 @@
       updateOs(){
        
         axios.put("http://localhost:8686/os", this.showModalDataEdit).then(res =>{
-          
+          console.log(this.showModalDataEdit.servico)
           this.showSuccessMessage = true;
           console.log(res)
           setTimeout(() => {
@@ -327,17 +327,17 @@
         })
       },
       //Funtion do Remove Cliente
-      removeClient(user){
+      removeOs(os){
   
-        console.log(user.nomecli)
+        console.log(os.os)
   
-        if(confirm(`Deseja excluir o cliente ` + user.nomecli + " ?")){
-          axios.delete("http://localhost:8686/client/"+user.idcli).then(res =>{
+        if(confirm(`Deseja excluir a OS ` + os.os + " ?")){
+          axios.delete("http://localhost:8686/os/"+os.os).then(res =>{
             console.log(res)
             
             setTimeout(() => {
   
-              alert("Cliente removido com sucesso!")
+              alert("Ordem de serviço removida com sucesso!")
               this.fetchClient()
               
             }, 1000);

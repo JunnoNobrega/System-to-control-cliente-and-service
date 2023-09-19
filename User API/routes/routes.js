@@ -32,4 +32,5 @@ router.get("/os", OsController.listos); // listar
 router.post('/os', /*AdminAuth,*/OsController.createOs); // rota de criação de usuário
 router.put("/os",  OsController.editOs);
 router.get("/os/:os", OsController.findOs); // rota para busca por id
+router.delete("/os/:os",/*AdminAuth,*/  OsController.remove); //rota para remover OS
 /**/
