@@ -3,28 +3,9 @@
       <div class="dashboard is-full-height">
   
         <!-- left panel -->
-        <div class="dashboard-panel is-small is-small">
-              <aside class="menu">
-                <ul class="menu-list">
-                  <li>
-                  
-                    <router-link :to="{name: 'home'}">Cadastro de Cliente</router-link> 
-                    <router-link :to="{name: 'os'}">Cadastro de OS</router-link> 
-
-                  </li>
-                  <li>
-                    <a @click="showMenuRel">Relatório ></a>
-                    <a v-if="showedMenuRel">Clientes</a>
-                    <a v-if="showedMenuRel">Serviços</a>
-                  </li>
-                  <li>
-                    <a href="/login" class="is-right">logout</a>
-                  </li>
-                </ul>
-              
-              </aside>
-        </div><!--Dashboarda-panel END-->
+        <LeftPanelView/>
       <!--END left panel -->
+
       <!-- main section -->
       <div class="dashboard-main is-scrollable">
         <nav class="navbar " >
@@ -184,7 +165,7 @@
 
                     <input  class="radio" v-model="showModalDataEdit.situacao" type="radio" name="situacao" value="Aceita">
                     <label class="radio" >Aceita</label><br>
-                    <input  class="radio" type="radio"  checked name="situacao" v-model="showModalData.situacao"  value="Recusada">
+                    <input  class="radio" type="radio"  checked name="situacao" v-model="showModalDataEdit.situacao"  value="Recusada">
                     <label class="radio" >Recusada</label><br>
                   </section>
                   <footer class="modal-card-foot">
@@ -205,7 +186,11 @@
   
   <script>
   import axios from 'axios';
+  import LeftPanelView from './LeftPanelView.vue'
   export default {
+    components: {
+      LeftPanelView,
+    },
     created(){
         axios.get("http://localhost:8686/os").then(res =>{
           this.oss = res.data;
@@ -388,6 +373,15 @@
   .dashboard-panel.is-small.rigth{
     flex: 0 0 3rem;
   }
+  .dashboard-main {
+    display: flex;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    text-align: center;
+    overflow: inherit;
+}
   thead{
     margin: 0 auto;
     text-align: center;

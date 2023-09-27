@@ -14,9 +14,9 @@
             <form  class="box" @submit.prevent="login">
               <div class="field">
                 <p>Login</p>
-                <input type="email" class="input" v-model="email"> 
+                <input type="email" class="input" placeholder="Digite o email!" v-model="email"> 
                 <p>Senha</p>
-                <input type="password" class="input" v-model="password">
+                <input type="password" class="input" placeholder="Digite a senha!" v-model="password">
                 <hr>
                 <button class="button is-success is-fullwidth" type="submit"> Login</button>
                 

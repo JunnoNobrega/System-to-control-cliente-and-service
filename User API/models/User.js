@@ -14,15 +14,7 @@ class User {
             return [];
         }
     }
-    async findAllClient(){
-        try {
-            var result = await knex.select(["idcli","nomecli","endcli","foneclie","emailcli"]).table("tbclientes");
-            return result;
-        }catch (err) {
-            console.log(err);
-            return [];
-        }
-    }
+
     // busca por id
     async findById(id){
         try {
@@ -55,13 +47,13 @@ class User {
     }
 
     // Cadastra os dados no banco de dados utilizando o knex.js
-    async new(email, password, name) {
+    async new(email, password, name, role) {
 
         try {
 
             var hash = await bcrypt.hash(password, 10);
 
-            await knex.insert({ email,password: hash,name,role: 0 }).table("users");
+            await knex.insert({ email,password: hash,name,role }).table("users");
 
         } catch (error) {
             console.log(error);

@@ -31,7 +31,8 @@ class UserController {
     }
     // criação de usuário
     async create(req, res) {
-        var { email, name, password } = req.body;
+        var { email, name, password, role } = req.body;
+
 
         if (email == undefined || email == "" || email == " ") {
             res.status(400);
@@ -44,12 +45,12 @@ class UserController {
         // Caso exista retorna o erro abaixo
         if(emailExistis){
             res.status(406);
-            res.json({err: "O email já está cadastrado!"})
+            res.json({err: "aO email já está cadastrado!"})
             return;
         }
 
         // caso não tenha segue passando os dados para o Model User.js
-        await User.new(email, password, name);
+        await User.new(email, password, name, role);
         res.status(200);
         res.send("tudo ok! ");
     }
@@ -122,7 +123,7 @@ class UserController {
     // Login de usuário
     async loginUser(req,res){
         var {email,password} = req.body;
-
+        
         var user = await User.findByEmail(email);
         
         if (user != undefined) {

@@ -1,4 +1,4 @@
-var express = require("express")
+var express = require("express");
 var app = express();
 var router = express.Router();
 var HomeController = require("../controllers/HomeController");
@@ -6,12 +6,15 @@ var UserController = require('../controllers/UserController');
 var ClientController = require('../controllers/ClientController');
 var OsController = require("../controllers/OsController");
 var AdminAuth = require("../middleware/AdminAuth");
+//var PdfMaker = require("pdfmake");
+//var pdfFonts = require('pdfkit/js/mixins/fonts');
+
 //Routes Users
 router.get('/', HomeController.index);
-router.post('/user', AdminAuth,UserController.create); // rota de criação de usuário
+router.post('/user', UserController.create); // rota de criação de usuário
 router.get("/user", UserController.index); // rota que lista todos usuários
-router.get("/user/:id",AdminAuth, UserController.findUser); // rota para busca por id
-router.put("/user", AdminAuth, UserController.edit); // rota para editar usuário
+router.get("/user/:id",/*AdminAuth,*/ UserController.findUser); // rota para busca por id
+router.put("/user", /*AdminAuth,*/ UserController.edit); // rota para editar usuário
 router.delete("/user/:id",/*AdminAuth,*/  UserController.remove); //rota para remover usuário
 router.post("/recoverpassword",UserController.recoverPassword); //recuperação de senha
 router.post("/changepassword", UserController.changePassword); //mudar senha
@@ -34,3 +37,6 @@ router.put("/os",  OsController.editOs);
 router.get("/os/:os", OsController.findOs); // rota para busca por id
 router.delete("/os/:os",/*AdminAuth,*/  OsController.remove); //rota para remover OS
 /**/
+
+// Route print
+//router.get("/print", ReportPrinter.print);

@@ -3,29 +3,7 @@
     <div class="dashboard is-full-height">
 
       <!-- left panel -->
-      <div class="dashboard-panel is-small is-small">
-            <aside class="menu">
-
-              <ul class="menu-list">
-                <li>
-                  <router-link :to="{name: 'home'}">Cadastro de Cliente</router-link> 
-                    <router-link :to="{name: 'os'}">Cadastro de OS</router-link> 
-                  <a v-if="showedMenuCad"> <router-link :to="{name: 'os'}">Os</router-link></a>
-                  
-
-                </li>
-                <li>
-                  <a @click="showMenuRel">Relatório ></a>
-                  <a v-if="showedMenuRel">Clientes</a>
-                  <a v-if="showedMenuRel">Serviços</a>
-                </li>
-                <li>
-                  <a href="/login" class="is-right">logout</a>
-                </li>
-              </ul>
-            
-            </aside>
-      </div>
+      <LeftPanelView />
     <!--END left panel -->
     
     <!-- main section -->
@@ -155,7 +133,13 @@
 
 <script>
 import axios from 'axios';
+import LeftPanelView from './LeftPanelView.vue'
 export default {
+  components: {
+      LeftPanelView,
+    },
+      
+
   created(){
       axios.get("http://localhost:8686/client").then(res =>{
         this.users = res.data;
