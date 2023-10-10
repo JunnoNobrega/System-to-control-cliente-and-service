@@ -40,6 +40,7 @@ export default {
       email: '',
       error: undefined,
       name: '',
+      roleuser: 0
       
     }
   },
@@ -50,15 +51,19 @@ export default {
           //Objetc login data
         email: this.email,
         password: this.password,
+        role: this.roleuser
         
       }).then(res =>{
        
         localStorage.setItem('token',res.data.token);
         localStorage.setItem('name',res.data.name);
+        localStorage.setItem('role',res.data.roleuser);
+        
         this.$router.push({name : 'home'})
       }).catch(err =>{
         var msgErro = err.response.data.err;
         this.error = msgErro;
+
         console.log(err);
       })
 

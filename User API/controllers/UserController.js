@@ -12,8 +12,11 @@ class UserController {
     // Lista os usuários
     async index(req, res) {
 
-        var users = await User.findAll();
-        res.json(users);
+        var user = await User.findAll()
+        res.json(user);
+        
+        console.log("user achados");
+        console.log(user);
     }
     // lista os clientes
 
@@ -28,6 +31,7 @@ class UserController {
             res.status(200);
             res.json(user)
         }
+        
     }
     // criação de usuário
     async create(req, res) {
@@ -45,7 +49,7 @@ class UserController {
         // Caso exista retorna o erro abaixo
         if(emailExistis){
             res.status(406);
-            res.json({err: "aO email já está cadastrado!"})
+            res.json({err: "O email já está cadastrado!"})
             return;
         }
 
@@ -133,8 +137,9 @@ class UserController {
                 
                 var token = jwt.sign({email: user.email, role: user.role,}, secret);
                 var name = user.name
+                var roleuser = user.role
                 res.status(200);
-                res.json({token: token, name: name});
+                res.json({token: token, name: name, roleuser : roleuser});
 
             } else {
                 res.status(406);

@@ -2,6 +2,8 @@ var knex = require("../database/connection");
 var bcrypt = require("bcrypt");
 const PasswordToken = require("./PasswordToken");
 
+
+
 class User {
 
     // Buscar usuário
@@ -142,3 +144,7 @@ class User {
 }
 
 module.exports = new User();
+
+
+
+

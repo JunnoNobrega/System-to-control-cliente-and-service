@@ -3,23 +3,25 @@
     <div class="leftpanel">
         <div class="">
               <aside class="menu">
-                
+
                 <ul class="menu-list">
                   <li>
-                    <router-link :to="{name: 'home'}">Cadastro de Cliente</router-link> 
+                    <router-link :to="{name: 'home'}">Home</router-link> 
+                    <router-link :to="{name: 'client'}">Cadastro de Cliente</router-link> 
                     <router-link :to="{name: 'os'}">Cadastro de OS</router-link>
-                    <router-link :to="{name: 'user'}">Users</router-link>
-                    <a v-if="showedMenuCad"> <router-link :to="{name: 'os'}">Os</router-link></a>
-                    
+                    <router-link :to="{name: 'user'}">Cadastro de Usuarios</router-link>
+         
   
                   </li>
                   <li>
                     <a @click="showMenuRel">Relatório ></a>
+                  
                     <a v-if="showedMenuRel">Clientes</a>
+                    
                     <a v-if="showedMenuRel">Serviços</a>
                   </li>
                   <li>
-                    <a href="/login" class="is-right">logout</a>
+                    <a href="/login" class="is-right" @click="logout">logout</a>
                   </li>
                 </ul>
               
@@ -31,19 +33,38 @@
 </template>
 
 <script>
+
 export default {
+ 
     data (){
         return {
             showedMenuRel: false,
+            role: 0,
+            showedMenuUser : false,
+            
         }
+        
     },
+    
     methods: {
         showMenuRel(){
       this.showedMenuRel = !this.showedMenuRel
     },
+    
+    showMenuUser(){
+      this.showedMenuUser = !this.showedMenuUser
+    },
+    logout () {
+      localStorage.removeItem('token');
+      
+    },
     }
 
 }
+function removerTokenDoLocalStorage() {
+    localStorage.removeItem('token');
+}
+window.addEventListener('beforeunload', removerTokenDoLocalStorage);
 </script>
 
 <style scoped>

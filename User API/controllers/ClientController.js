@@ -12,10 +12,11 @@ var secret = "asçlkdfjçaslkdaçsldkfjasçldkjaçlfs";
 class ClientController {
 
     // lista os clientes
-    async listclient(req, res) {
+    async listclient(req, res ) {
 
         var users = await Client.findAllClient();
         res.json(users);
+
     }
     //Busca por id
     async findUser(req,res){

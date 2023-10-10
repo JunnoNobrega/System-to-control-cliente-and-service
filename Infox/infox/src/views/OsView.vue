@@ -62,13 +62,14 @@
                   <td>
                     <button class="button is-warning is-small is-hovered" @click="editOs(os)">Editar</button> |
                     <button class="button is-danger is-small is-focused" @click="removeOs(os)">Deletar</button> |
-                    <button class="button  is-small is-focused" @click="removeClient(user)">Imprimir</button> 
+                    <button class="button  is-small is-focused" @click="selectedOs =os; printOs()">Imprimir</button> 
                   </td>
                 </tr>
                 
             </tbody>
           </table>
           <button class="button is-success" @click="showModalCreate =true">Cadastrar novo</button>
+          <button class="button is-focused" @click="printAllOs()">Gerar relatório</button>
             
 
           <!-- Modal create -->
@@ -90,14 +91,10 @@
                     <input class="input" v-model="showModalData.defeito" type="text">
 
                     <p>Serviço</p>
-                    <Textarea class="textarea" v-model="showModalData.servico" widith="250px" height="250px"></Textarea>
+                    <input class="input" type="text" style="height: 100px;"  v-model="showModalData.servico">
 
                     <p>Técnico</p>
-                    <select  class="select is-fullwidth" v-model="showModalData.tecnico" id="estado" name="estado">
-                      <option value="Tecnico 1">Tecnico 1</option>
-                      <option value="tecnico 2">Tecnico 2</option>
-                      <option value="técnico 3">Tecnico 3</option>
-                    </select>
+                    <input class="input" type="text" :value="this.name" disabled>
 
                     <p>Valor</p>
                     <input class="input" v-model="showModalData.valor" type="number">
@@ -142,14 +139,10 @@
                     <input class="input" v-model="showModalDataEdit.defeito" type="text">
 
                     <p>Serviço</p>
-                    <Textarea class="textarea" :value="showModalDataEdit.servico" widith="250px" height="250px"></Textarea>
+                    <input class="input" type="text"  style="height: 100px;" v-model="showModalDataEdit.servico">
 
                     <p>Técnico</p>
-                    <select  class="select is-fullwidth" v-model="showModalDataEdit.tecnico" id="estado" name="estado">
-                      <option value="Tecnico 1">Tecnico 1</option>
-                      <option value="tecnico 2">Tecnico 2</option>
-                      <option value="técnico 3">Tecnico 3</option>
-                    </select>
+                    <input class="input" type="text" :value="this.name" disabled>
 
                     <p>Valor</p>
                     <input class="input" v-model="showModalDataEdit.valor" type="number">
@@ -169,12 +162,15 @@
                     <label class="radio" >Recusada</label><br>
                   </section>
                   <footer class="modal-card-foot">
+                      
                     <button class="button is-success" @click="updateOs()">Save changes</button>
                     <button class="button" @click="showModalEdit = false">Cancel</button>
                   </footer>
+                  
                 </div>
               </div>
            <!-- Modal  END edit -->
+           
         </section>
       </div><!--Mail dashboard END-->
       <div class="dashboard-panel is-small rigth"></div>
@@ -187,16 +183,18 @@
   <script>
   import axios from 'axios';
   import LeftPanelView from './LeftPanelView.vue'
+
   export default {
     components: {
       LeftPanelView,
+      
     },
     created(){
         axios.get("http://localhost:8686/os").then(res =>{
           this.oss = res.data;
           this.name = localStorage.getItem('name');
           const maxOs = Math.max(...this.oss.map(os => os.os));
-        
+       
         // Defina o próximo valor de OS
           this.nextOs = maxOs + 1;
         }).catch(err =>{
@@ -206,12 +204,14 @@
     },
     data (){
       return{
+        selectedOs: null,
         name: '',
         oss: [],
         showedMenuCad: false,
         showedMenuRel: false,
         showModalCreate: false,
         showModalEdit: false,
+        
         showModalData: {
           os: 0,
           equipamento: '',
@@ -221,6 +221,7 @@
           valor: 0,
           tipo: '',
           situacao: '',
+          idcli: '',
         },
         nextOs: "",
         showModalDataEdit: {
@@ -228,7 +229,7 @@
           equipamento: '',
           defeito: '',
           servico: '',
-          tecnico: '',
+          tecnico: this.name,
           valor: 0,
           tipo: '',
           situacao: '',
@@ -243,16 +244,50 @@
       showMenuRel(){
         this.showedMenuRel = !this.showedMenuRel
       },
-      //Funtion to create a new Client.
+      printOs (){
+  
+        axios.get("http://localhost:8686/print/os/"+this.selectedOs.os, { responseType: 'blob' })
+        .then(res => {
+ 
+            const blob = new Blob([res.data], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+
+            // Abra o PDF em uma nova janela
+            window.open(url, '_blank');
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      },  
+      printAllOs (){
+  
+        axios.get("http://localhost:8686/print/allos/", { responseType: 'blob' })
+        .then(res => {
+
+        const blob = new Blob([res.data], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+
+        // Abra o PDF em uma nova janela
+        window.open(url, '_blank');
+         })
+        .catch(err => {
+          console.error(err);
+        });
+      },  
+        //Funtion to create a new Client.
+      
       createOs(){
-        axios.post("http://localhost:8686/os", this.showModalData).then( res => {
+         console.log( "aqui")
+            console.log( this.clients)
+        axios.post("http://localhost:8686/os", { ...this.showModalData, tecnico:this.name }).then( res => {
             console.log(res)
-            console.log( this.showModalData.servico)
+
+           
             this.showSuccessMessage = "";
             this.showModalData.equipamento  = "";
             this.showModalData.defeito  = "";
-            this.showModalData.servico  = "[]";
-            this.showModalData.tecnico  = "";
+            this.showModalData.servico  = "";
+            //this.showModalData.tecnico  = "";
             this.showModalData.valor  = "";
             this.showModalData.tipo  = "";
             this.showModalData.situacao  = "";
@@ -285,7 +320,7 @@
           equipamento: os.equipamento,
           defeito: os.defeito,
           servico: os.servico,
-          tecnico: os.tecnico,
+          tecnico: this.name,
           valor: os.valor,
           tipo: os.tipo,
           situacao: os.situacao,
@@ -367,9 +402,13 @@
     color: white;
     border-bottom: 1px solid;
   }
+  .button {
+  margin: 1%;
+}
   .input{
     margin-bottom: 1%;
   }
+ 
   .dashboard-panel.is-small.rigth{
     flex: 0 0 3rem;
   }
@@ -380,7 +419,7 @@
     flex-direction: column;
     min-height: 100vh;
     text-align: center;
-    overflow: inherit;
+   
 }
   thead{
     margin: 0 auto;

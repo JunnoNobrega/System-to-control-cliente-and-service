@@ -60,7 +60,7 @@
             </tbody>
           </table>
           <button class="button is-success" @click="showModalCreate =true">Cadastrar novo usuário</button>
-            
+          <button class="button is-focused" @click="printUser()">Gerar relatório</button>
             <!-- Modal Create -->
                 <div :class="{modal: true, 'is-active':showModalCreate}">
                     <div class="modal-background">
@@ -184,42 +184,54 @@
       },
   
       //Funtion to create a new Client.
-      
-createClient() {
-  // Função para validar um email
-  function validarEmail(email) {
-    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    return regex.test(email);
-  }
+      printUser (){
+        axios.get("http://localhost:8686/print/user", { responseType: 'blob' })
+          .then(res => {
+            const blob = new Blob([res.data], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
 
-  if (this.showModalData.password === this.showModalData.passwordconfirm) {
-    // Validar o email antes de fazer a requisição
-    if (!validarEmail(this.showModalData.email)) {
-      alert("O email inserido não é válido. Por favor, insira um email válido.");
-      return; // Saia da função se o email for inválido
-    }
+            // Abra o PDF em uma nova janela
+            window.open(url, '_blank');
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      },     
+      createClient() {
+        // Função para validar um email
+        function validarEmail(email) {
+          const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+          return regex.test(email);
+        }
 
-    axios.post("http://localhost:8686/user", this.showModalData)
-      .then(res => {
-        this.showSuccessMessage = true;
-        this.showModalData.name = '';
-        this.showModalData.email = '';
-        this.showModalData.password = '';
-        this.showModalData.passwordconfirm = '';
-        console.log(res);
-        setTimeout(() => {
-          this.showModalCreate = false;
-          this.fetchClient();
-          this.showSuccessMessage = false;
-        }, 2000);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  } else {
-    alert("A senha que você digitou na confirmação não corresponde à senha criada. Certifique-se de que ambas as senhas sejam idênticas para continuar.");
-  }
-},
+        if (this.showModalData.password === this.showModalData.passwordconfirm) {
+          // Validar o email antes de fazer a requisição
+          if (!validarEmail(this.showModalData.email)) {
+            alert("O email inserido não é válido. Por favor, insira um email válido.");
+            return; // Saia da função se o email for inválido
+          }
+
+              axios.post("http://localhost:8686/user", this.showModalData)
+                .then(res => {
+                  this.showSuccessMessage = true;
+                  this.showModalData.name = '';
+                  this.showModalData.email = '';
+                  this.showModalData.password = '';
+                  this.showModalData.passwordconfirm = '';
+                  console.log(res);
+                  setTimeout(() => {
+                    this.showModalCreate = false;
+                    this.fetchClient();
+                    this.showSuccessMessage = false;
+                  }, 2000);
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            } else {
+              alert("A senha que você digitou na confirmação não corresponde à senha criada. Certifique-se de que ambas as senhas sejam idênticas para continuar.");
+            }
+          },
       // Funtion to reload data on page.
       fetchClient(){
         axios.get("http://localhost:8686/user").then(res =>{
@@ -277,8 +289,13 @@ createClient() {
         }
       }
     }
+    //acaba aquiiiiiiiiiiiiiiiiiiiiiiiiii
   }
+
   </script>
+  <script>
+
+</script>
   <style scoped>
   
   h1 {
@@ -299,7 +316,11 @@ createClient() {
     text-align: left;
   
    
+
   }
+  .button {
+  margin: 1%;
+}
   .content ul :hover {
   
     color: #024572;
