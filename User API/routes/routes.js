@@ -37,15 +37,15 @@ router.post('/client', /*AdminAuth,*/ ClientController.create , AdminAuth); // r
 
 // Routes tb os
 router.get("/os", /*AdminAuth,*/ OsController.listos); // listar
-router.post('/os', /*AdminAuth,*/ OsController.createOs); // rota de criação de usuário
+router.post('/os', /*AdminAuth,*/ OsController.createOs); // rota de criação de os
 router.put("/os",  /*AdminAuth,*/ OsController.editOs);
 router.get("/os/:os", /*AdminAuth,*/ OsController.findOs); // rota para busca por id
 router.delete("/os/:os",/*AdminAuth,*/ OsController.remove); //rota para remover OS
 /**/
 
 // Route print
-router.get("/print/user", PrintController.printUsers); 
-router.get("/print/client", PrintController.printClients); 
-router.get("/print/os/:os", PrintController.printOs);  
-router.get("/print/allos/", PrintController.printAllOs);  
+router.get("/print/user", PrintController.printUsers);  // print report users 
+router.get("/print/client", PrintController.printClients); // print report clients 
+router.get("/print/os/:os", PrintController.printOs);   // print report OS 
+router.get("/print/allos/", PrintController.printAllOs);   // print report all OS 
 module.exports = router;

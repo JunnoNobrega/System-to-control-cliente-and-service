@@ -54,7 +54,7 @@ export default {
         role: this.roleuser
         
       }).then(res =>{
-       
+  
         localStorage.setItem('token',res.data.token);
         localStorage.setItem('name',res.data.name);
         localStorage.setItem('role',res.data.roleuser);

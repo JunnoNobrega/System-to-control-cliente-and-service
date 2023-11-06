@@ -15,8 +15,7 @@ class UserController {
         var user = await User.findAll()
         res.json(user);
         
-        console.log("user achados");
-        console.log(user);
+     
     }
     // lista os clientes
 

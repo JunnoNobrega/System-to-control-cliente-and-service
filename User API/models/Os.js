@@ -6,9 +6,9 @@ const e = require("express");
 class OService {
 
     // Create OS
-    async createOs(equipamento, defeito, servico, tecnico, valor, idcli, tipo, situacao){
+    async createOs(equipamento, defeito, servico, tecnico, valor, idcli_os, tipo, situacao){
         try {
-            await knex.insert({equipamento, defeito, servico, tecnico, valor, idcli, tipo, situacao}).table("tbos");
+            await knex.insert({equipamento, defeito, servico, tecnico, valor, idcli_os, tipo, situacao}).table("tbos");
         } catch (error) {
             console.log(error)
         }
@@ -30,8 +30,15 @@ class OService {
     // Find OS
     async findAll(){
         try {
-            var result = await knex.select(["os","data_os", "equipamento", "defeito", "servico", "tecnico", "valor", "idcli", "tipo","situacao"]).table("tbos");
-            return result;
+            var result = await knex.select(["os","data_os", "equipamento", "defeito", "servico", "tecnico", "idcli_os","valor", "tipo","situacao"])
+            .from("tbos")
+            .innerJoin("tbclientes", "tbos.idcli_os", "tbclientes.idcli")
+            .table("tbos");
+            
+            
+            console.log("Aqui embaixo result")
+            console.log(result)
+  return result;
         } catch (error) {
             console.log(error);  
             return [];  

@@ -72,7 +72,7 @@
                       <h1>Cadastrar novo Cliente: </h1>
                                         <div v-if="showSuccessMessage">
                                 <div class="notification is-success">
-                                    <p>Usuário cadastrado com sucesso</p>
+                                    <p>Cliente cadastrado com sucesso</p>
                                 </div>
                               </div>
                       <p>Nome</p>
@@ -143,6 +143,7 @@ export default {
   created(){
       axios.get("http://localhost:8686/client").then(res =>{
         this.users = res.data;
+        console.log
         this.name = localStorage.getItem('name');
 
       }).catch(err =>{

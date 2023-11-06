@@ -3,7 +3,7 @@ var knex = require("../database/connection");
 
 
 class Print {
-
+    // GET FROM DATABASE DATA FOR CRETE REPORT USERS
     async reportUsers(){
         try {
             var result = await knex.select(["id","email","role","name"]).table('users');
@@ -13,6 +13,7 @@ class Print {
             return {error, err: "Não foi possível gerar relatório!"};
         }
     }
+    // GET FROM DATABASE DATA FOR CRETE REPORT cLIENTS
     async reportClients(){
         try {
             var result = await knex.select(["idcli","nomecli","endcli","foneclie","emailcli"]).table("tbclientes");
@@ -22,9 +23,10 @@ class Print {
             return {error, err: "Não foi possível gerar relatório!"};
         }
     }
+    // GET FROM DATABASE DATA FOR CRETE REPORT OS
     async reportOs(os){
         try {
-            var result = await knex.select(["os","data_os","equipamento","defeito","servico","tecnico","valor","idcli","tipo","situacao"]).where({os:os}).table("tbos");
+            var result = await knex.select(["os","data_os","equipamento","defeito","servico","tecnico","valor","idcli_os","tipo","situacao"]).where({os:os}).table("tbos");
         
             return result;
         } catch (error) {
@@ -32,9 +34,10 @@ class Print {
             return {error, err: "Não foi possível gerar relatório!"};
         }
     }
+    // GET FROM DATABASE DATA FOR CRETE REPORT FROM ALL OS
     async reportAllOs(){
         try {
-            var result = await knex.select(["os","data_os","equipamento","defeito","servico","tecnico","valor","idcli","tipo","situacao"]).table("tbos");
+            var result = await knex.select(["os","data_os","equipamento","defeito","servico","tecnico","valor","idcli_os","tipo","situacao"]).table("tbos");
         
             return result;
         } catch (error) {

@@ -42,6 +42,7 @@
                   <th>Serviço</th>
                   <th>Tecnico</th>
                   <th>Valor</th>
+                  <th>Cliente</th>
                   <th>Tipo</th>
                   <th>Situacao</th>
                 </tr>
@@ -56,6 +57,7 @@
                   <td>{{ os.servico }}</td>
                   <td>{{ os.tecnico }}</td>
                   <td>{{ os.valor }}</td>
+                  <td>{{ os.idcli_os }}</td>
                   <td>{{ os.tipo }}</td>
                   <td>{{ os.situacao }}</td>
           
@@ -96,6 +98,12 @@
                     <p>Técnico</p>
                     <input class="input" type="text" :value="this.name" disabled>
 
+                    <p>Selecionar Cliente:</p>
+                    <select class="select is-medium"  v-model="showModalData.idcli_os" >
+                      <option value="">Selecione um cliente</option>
+                      <option  v-for="clients in this.arrayDataName" :key="clients.idcli_os" :value="parseInt(clients.idcli_os)">{{ clients.idcli  }}</option>
+                    </select>
+                   
                     <p>Valor</p>
                     <input class="input" v-model="showModalData.valor" type="number">
                     <hr>
@@ -191,27 +199,39 @@
     },
     created(){
         axios.get("http://localhost:8686/os").then(res =>{
+          
           this.oss = res.data;
+          // console.log("resaqui")
+          console.log(res.data.idcli_os)
           this.name = localStorage.getItem('name');
           const maxOs = Math.max(...this.oss.map(os => os.os));
-       
+         
+          
+
         // Defina o próximo valor de OS
           this.nextOs = maxOs + 1;
         }).catch(err =>{
           console.log(err);
         });
-        
+        axios.get("http://localhost:8686/client").then(res =>{
+          this.arrayDataName = res.data
+          console.log(this.arrayDataName)
+          const names = this.arrayDataName.map(objeto => objeto.nomecli)
+          console.log(names)
+          })
     },
     data (){
       return{
+        names: [],
+        arrayDataName: [],
         selectedOs: null,
         name: '',
+        namecli: '',
         oss: [],
         showedMenuCad: false,
         showedMenuRel: false,
         showModalCreate: false,
         showModalEdit: false,
-        
         showModalData: {
           os: 0,
           equipamento: '',
@@ -219,9 +239,9 @@
           servico: '',
           tecnico: '',
           valor: 0,
+          idcli_os: '',
           tipo: '',
           situacao: '',
-          idcli: '',
         },
         nextOs: "",
         showModalDataEdit: {
@@ -231,6 +251,7 @@
           servico: '',
           tecnico: this.name,
           valor: 0,
+          idcli_os: this.idcli_os,
           tipo: '',
           situacao: '',
       },
@@ -277,12 +298,21 @@
         //Funtion to create a new Client.
       
       createOs(){
-         console.log( "aqui")
-            console.log( this.clients)
-        axios.post("http://localhost:8686/os", { ...this.showModalData, tecnico:this.name }).then( res => {
-            console.log(res)
+         
 
-           
+            axios.get("http://localhost:8686/client").then(res =>{
+            this.namecli = res.data;
+            this.name = localStorage.getItem('name');
+            console.log(res)
+          }).catch(err =>{
+            console.log(err);
+          });
+          console.log(this.namecli) 
+          console.log("aqui em cima") 
+          axios.post("http://localhost:8686/os", { ...this.showModalData, tecnico:this.name  }).then( res => {
+
+
+           res.status = "ok"
             this.showSuccessMessage = "";
             this.showModalData.equipamento  = "";
             this.showModalData.defeito  = "";
@@ -306,7 +336,10 @@
       fetchClient(){
         axios.get("http://localhost:8686/os").then(res =>{
           this.oss = res.data;
+   
           this.name = localStorage.getItem('name');
+
+          
           console.log(res)
         }).catch(err =>{
           console.log(err);

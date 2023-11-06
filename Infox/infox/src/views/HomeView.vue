@@ -3,17 +3,15 @@
     <div class="dashboard is-full-height">
         <LeftPanelView/>
         <div class="dashboard-main is-scrollable">
-            <section class="section">
-                    
-                    <ul id="navgator">
-                        <button class="button is-link  is-large"><router-link :to="{name: 'home'}">Cadastro de Clientes</router-link></button>
-                        <button class="button is-link  is-large"><router-link :to="{name: 'os'}">Cadastro de OS</router-link></button>
-                        <button class="button is-link  is-large"><router-link :to="{name: 'user'}">Cadastro de Usuários</router-link></button>
           
+            <section class="section">
+              <h1>Bem Vindo! </h1>
+              <h2>Usuário : {{ name }}</h2>
+                    <ul id="navgator">
+                      <router-link  class="routerlink button is-link  is-large" :to="{name: 'client'} ">Cadastro de Clientes</router-link>
+                        <router-link class="routerlink button is-link  is-large" :to="{name: 'os'}">Cadastro de OS</router-link>
+                        <router-link v-if="isAdmin == 1" class="routerlink button is-link  is-large" :to="{name: 'user'}">Cadastro de Usuários</router-link>
                     </ul>
-             
-
-
             </section>
         </div>
     </div>
@@ -27,6 +25,13 @@ export default {
     components: {
       LeftPanelView,
     },
+    data(){
+      return{
+        name:  localStorage.getItem('name'),
+        isAdmin: localStorage.getItem('role'),
+      }
+    },
+
 }
 </script>
 
@@ -48,20 +53,21 @@ h1 {
     display: flex;
     
 }
-#navgator button {
+.routerlink {
     margin: 1%;
     justify-content: space-between;
     text-align: center;
     margin: 1%;
     justify-content: space-between;
-    text-align: center;
     height: 30vh;
     width: 100%;
+    background: #485fc7;
 }
-#navgator button a{
+.routerlink button {
+    text-align: center;
     color: aliceblue;
 }
-#navgator li:first-child {
+.routerlink li:first-child {
     inline-size: none;
     background-color: red;
     padding: auto;;

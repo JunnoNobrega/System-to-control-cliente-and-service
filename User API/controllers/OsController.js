@@ -15,12 +15,15 @@ async listos(req, res){
     var os = await OService.findAll();
     res.json(os);
 
+
+   
+
 }
 async createOs(req,res){
 
-    var {equipamento, defeito, servico, tecnico, valor, idcli, tipo, situacao} = req.body;
+    var {equipamento, defeito, servico, tecnico, valor, idcli_os, tipo, situacao} = req.body;
 
-    await OService.createOs(equipamento, defeito, servico, tecnico, valor, idcli, tipo, situacao);
+    await OService.createOs(equipamento, defeito, servico, tecnico, valor, idcli_os, tipo, situacao);
     res.status(200);
     res.send("Tudo OK!");
 }
@@ -62,8 +65,7 @@ async editOs(req,res){
         var os = req.params.os;
         var result = await OService.delete(os);
 
-        console.log("aqui embaixo")
-        console.log(result)
+
 
         if (result.status) {
             res.status(200);

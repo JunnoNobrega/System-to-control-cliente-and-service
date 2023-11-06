@@ -2,6 +2,7 @@ var Print = require("../models/Print");
 const PdfPrinter = require("pdfmake");
 
 class PrintController {
+    // REPORT LIST USERS
     async printUsers(req, res) {
         try {
             var user = await Print.reportUsers();
@@ -59,6 +60,7 @@ class PrintController {
             res.status(500).send('Erro ao gerar o relatório PDF');
         }
     }
+    // REPORT PRINT LIST CLIENTES
     async printClients(req, res) {
         try {
             var user = await Print.reportClients();
@@ -118,6 +120,7 @@ class PrintController {
             res.status(500).send('Erro ao gerar o relatório PDF');
         }
     }
+    // REPORT CREATE A OS
     async printOs(req, res) {
         try {
             var os = req.params.os;
@@ -126,7 +129,7 @@ class PrintController {
                 const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
                 return new Date(date).toLocaleDateString(undefined, options);
              }
-            const tableBody = user.map(user => [user.os,  formatDate(user.data_os), user.equipamento, user.defeito, user.servico, user.tecnico, user.valor, user.idcli, user.tipo, user.situacao]);
+            const tableBody = user.map(user => [user.os,  formatDate(user.data_os), user.equipamento, user.defeito, user.servico, user.tecnico, user.valor, user.idcli_os, user.tipo, user.situacao]);
             
             const fonts = {
                 Helvetica: {
@@ -187,6 +190,7 @@ class PrintController {
             res.status(500).send('Erro ao gerar o relatório PDF');
         }
     }
+    // REPORT PRINT ALL OS
     async printAllOs(req, res) {
         try {
         var user = await Print.reportAllOs();
@@ -194,7 +198,7 @@ class PrintController {
                 const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
                 return new Date(date).toLocaleDateString(undefined, options);
              }
-            const tableBody = user.map(user => [user.os,  formatDate(user.data_os), user.equipamento, user.defeito, user.servico, user.tecnico, user.valor, user.idcli, user.tipo, user.situacao]);
+            const tableBody = user.map(user => [user.os,  formatDate(user.data_os), user.equipamento, user.defeito, user.servico, user.tecnico, user.valor, user.idcli_os, user.tipo, user.situacao]);
             
             const fonts = {
                 Helvetica: {

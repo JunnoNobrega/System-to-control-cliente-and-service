@@ -11,13 +11,14 @@ function AdminAuth (to, from, next){
 
     var req = {
       headers: {
-        Authorization: "Bearer " + localStorage.getItem('token') 
-      }
+        Authorization: "Bearer " + localStorage.getItem('token')
+      },
     }
     console.log(req)
     axios.post("http://localhost:8686/validate",{},req).then(res => {
-      console.log(res);
-      next();
+      console.log(res)
+      next()
+      
     }).catch(err => {
       console.log(err)
       next("/login")
@@ -58,6 +59,8 @@ const routes = [
     component: ClientView,
     beforeEnter:  AdminAuth,
   },
+
+  
 
   
 ]

@@ -9,12 +9,12 @@
                     <router-link :to="{name: 'home'}">Home</router-link> 
                     <router-link :to="{name: 'client'}">Cadastro de Cliente</router-link> 
                     <router-link :to="{name: 'os'}">Cadastro de OS</router-link>
-                    <router-link :to="{name: 'user'}">Cadastro de Usuarios</router-link>
+                    <router-link v-if="isAdmin == 1" :to="{name: 'user'}">Cadastro de Usuarios</router-link>
          
   
                   </li>
                   <li>
-                    <a @click="showMenuRel">Relatório ></a>
+                    <a @click="showMenuRel" v-if="isAdmin == 1">Relatório ></a>
                   
                     <a v-if="showedMenuRel">Clientes</a>
                     
@@ -41,6 +41,7 @@ export default {
             showedMenuRel: false,
             role: 0,
             showedMenuUser : false,
+            isAdmin: localStorage.getItem('role'),
             
         }
         
