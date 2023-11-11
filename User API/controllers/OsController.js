@@ -1,10 +1,6 @@
 var OService = require("../models/Os.js");
 
-var PasswordToken = require("../models/PasswordToken");
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcrypt");
 
-var secret = "asçlkdfjçaslkdaçsldkfjasçldkjaçlfs";
 
 
 

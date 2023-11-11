@@ -9,7 +9,8 @@
                     <router-link :to="{name: 'home'}">Home</router-link> 
                     <router-link :to="{name: 'client'}">Cadastro de Cliente</router-link> 
                     <router-link :to="{name: 'os'}">Cadastro de OS</router-link>
-                    <router-link v-if="isAdmin == 1" :to="{name: 'user'}">Cadastro de Usuarios</router-link>
+                    <router-link v-if="isAdmin == 1" :to="{name: 'home'}">Cadastro de Usuarios</router-link>
+                    <router-link :to="{name: 'login'}">Login</router-link> 
          
   
                   </li>
@@ -21,7 +22,7 @@
                     <a v-if="showedMenuRel">Serviços</a>
                   </li>
                   <li>
-                    <a href="/login" class="is-right" @click="logout">logout</a>
+                    <a  class="is-right"  @click="logout">logout</a>
                   </li>
                 </ul>
               
@@ -56,7 +57,8 @@ export default {
       this.showedMenuUser = !this.showedMenuUser
     },
     logout () {
-      localStorage.removeItem('token');
+      localStorage.clear();
+      location.reload();
       
     },
     }

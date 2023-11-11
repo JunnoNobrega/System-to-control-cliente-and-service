@@ -11,10 +11,10 @@
       <nav class="navbar ">
         <ul>
           <li>
-            <h3>Bem vindo:  </h3>
+            <h3>Bem vindo!  </h3>
           </li>
           <li>
-            <h3>{{ name }}</h3>
+            <h2 v-if="isAdmin == 1" >Usuário : {{ name }}</h2>
           </li>
         </ul>
       </nav>

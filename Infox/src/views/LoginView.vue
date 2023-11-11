@@ -1,7 +1,9 @@
 <template>
    
+   
+
   <div class="content">
-    <h1>INFO X</h1>
+    
 
     <div class="columns is-centered">
         <div class="column is-half ">
@@ -18,8 +20,8 @@
                 <p>Senha</p>
                 <input type="password" class="input" placeholder="Digite a senha!" v-model="password">
                 <hr>
-                <button class="button is-success is-fullwidth" type="submit"> Login</button>
-                
+                <button class="button is-success is-fullwidth" type="submit"> Login</button><br>
+                <router-link :to="{name: 'home'}"><p class="goback"  >Clique aqui para voltar para página inicial!</p></router-link> 
               </div>
 
             </form>
@@ -43,6 +45,7 @@ export default {
       roleuser: 0
       
     }
+    
   },
   methods: {
     //LOGIN FUNCTION
@@ -87,4 +90,12 @@ export default {
     font-size: 1.5em;
     
   }
+.goback {
+  font-size:0.75em; 
+  color: black;
+}
+.goback:hover {
+  font-size:0.85em; 
+  color: gray
+}
 </style>

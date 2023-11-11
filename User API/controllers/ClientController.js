@@ -1,10 +1,6 @@
 var Client = require("../models/Client");
 
-var PasswordToken = require("../models/PasswordToken");
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcrypt");
 
-var secret = "asçlkdfjçaslkdaçsldkfjasçldkjaçlfs";
 
 
 

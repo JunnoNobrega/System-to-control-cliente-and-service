@@ -6,7 +6,7 @@
           
             <section class="section">
               <h1>Bem Vindo! </h1>
-              <h2>Usuário : {{ name }}</h2>
+              <h2 v-if="isAdmin == 1" >Usuário : {{ name }}</h2>
                     <ul id="navgator">
                       <router-link  class="routerlink button is-link  is-large" :to="{name: 'client'} ">Cadastro de Clientes</router-link>
                         <router-link class="routerlink button is-link  is-large" :to="{name: 'os'}">Cadastro de OS</router-link>

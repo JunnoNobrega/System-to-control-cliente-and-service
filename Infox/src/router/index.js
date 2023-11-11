@@ -39,7 +39,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView,
-    beforeEnter: AdminAuth,
+
   },
   {
     path: '/user',
@@ -51,13 +51,13 @@ const routes = [
     path: '/os',
     name: 'os',
     component: OsView,
-    beforeEnter:  AdminAuth,
+
   },
   {
     path: '/client',
     name: 'client',
     component: ClientView,
-    beforeEnter:  AdminAuth,
+
   },
 
   
