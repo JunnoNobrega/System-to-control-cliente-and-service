@@ -31,7 +31,7 @@ async editOs(req,res){
     var {os, equipamento, defeito, servico, tecnico, valor, idcli, tipo, situacao} = req.body;
     
     var result = await OService.edit(os, equipamento, defeito, servico, tecnico, valor, idcli, tipo, situacao);
-    console.log(result)
+    
     if (result != undefined) {
         if (result.status == true ){
             res.status(200);

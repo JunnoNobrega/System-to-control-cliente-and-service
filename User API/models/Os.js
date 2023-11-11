@@ -35,9 +35,7 @@ class OService {
             .innerJoin("tbclientes", "tbos.idcli_os", "tbclientes.idcli")
             .table("tbos");
             
-            
-            console.log("Aqui embaixo result")
-            console.log(result)
+
   return result;
         } catch (error) {
             console.log(error);  

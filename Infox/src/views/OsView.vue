@@ -309,7 +309,7 @@
           });
           console.log(this.namecli) 
           console.log("aqui em cima") 
-          axios.post("http://localhost:8686/os", { ...this.showModalData, tecnico:this.name  }).then( res => {
+          axios.post("http://localhost:8686/os",  { ...this.showModalData, tecnico:this.name,  }).then( res => {
 
 
            res.status = "ok"
