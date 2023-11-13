@@ -28,7 +28,7 @@ class ClientController {
     }
     // criação de usuário
     async create(req, res) {
-        var { nomecli, endcli, foneclie,emailcli } = req.body;
+        var { cpf, nomecli, endcli, foneclie,emailcli } = req.body;
 
         if (emailcli == undefined || emailcli == "" || emailcli == " ") {
             res.status(400);
@@ -46,16 +46,16 @@ class ClientController {
         }
 
         // caso não tenha segue passando os dados para o Model User.js
-        await Client.new(nomecli, endcli, foneclie,emailcli);
+        await Client.new(cpf, nomecli, endcli, foneclie,emailcli);
         res.status(200);
         res.send("tudo ok! ");
     }
     //edição de usuário
 
     async edit(req,res){
-        var {idcli,nomecli,endcli,foneclie,emailcli} = req.body;
+        var {idcli, cpf,nomecli,endcli,foneclie,emailcli} = req.body;
       
-        var result = await Client.update(idcli,nomecli,endcli,foneclie,emailcli);
+        var result = await Client.update(idcli,cpf,nomecli,endcli,foneclie,emailcli);
         if(result != undefined){
             if(result.status ==true){
                 res.status(200);

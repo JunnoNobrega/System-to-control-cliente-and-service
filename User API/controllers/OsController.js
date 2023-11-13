@@ -45,7 +45,6 @@ async editOs(req,res){
    //Busca por id
    async findOs(req,res){
     var os = req.params.os;
- 
     var os = await OService.findById(os);
     if (os == undefined) {
 

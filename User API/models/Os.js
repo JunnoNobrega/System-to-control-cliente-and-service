@@ -16,9 +16,9 @@ class OService {
     // busca por id
     async findById(os){
         try {
-            var result = await knex.select(["os","data_os","equipamento","defeito","servico","tecnico","valor","idcli","tipo","situacao"]).where({os:os}).table("tbos");
+            var result = await knex.select(["os","data_os","equipamento","defeito","servico","tecnico","valor","idcli_os","tipo","situacao"]).where({os:os}).table("tbos");
             if(result.length > 0){
-                return result[0].os;
+                return result[0];
             }else{
                 return undefined;
             }

@@ -20,20 +20,28 @@
       </nav>
       <section class="section">
         <label for=""><h4>  Cadastro de clientes</h4></label><br>
-        <input type="text" placeholder="Buscar clientes cadastrados" class="input ">
-        <button class="button is-info is-fullwidth">Buscar</button>
+
+        <label for=""><h4>Busca de Clientes</h4></label><br>
+          <input type="text" placeholder="Buscar clientes cadastrados" v-model="findIdClient" class="input ">
+          <button class="button is-info is-fullwidth" type="submit" @click="findClient()">Buscar</button>
+          <hr>
+
+
+
+
         <hr>
         <table class="table  is-bordered">
             <thead>
             <h2>Clientes cadastrados</h2>
             <div v-if="showSuccessMessage">
-                            <div class="notification is-success">
-                              <p>Usuário Editado com sucesso</p>
-                            </div>
+              <div class="notification is-success">
+                <p>Usuário Editado com sucesso</p>
+              </div>
             </div>
         
               <tr>
                 <th> Id</th>
+                <th>CPF</th>
                 <th>Nome</th>
                 <th>Endereço</th>
                 <th>Fone</th>
@@ -46,6 +54,7 @@
           <tbody>
               <tr v-for="user in users" :key="user.id">
                 <td>{{ user.idcli }}</td>
+                <td>{{ user.cpf }}</td>
                 <td>{{ user.nomecli }}</td>
                 <td>{{ user.endcli }}</td>
                 <td>{{ user.foneclie }}</td>
@@ -61,6 +70,9 @@
         </table>
         <button class="button is-success" @click="showModalCreate =true">Cadastrar novo</button>
         <button class="button is-focused" @click="printClient()">Gerar relatório</button>
+        <button v-if="backClient" class="button is-focused" @click="findIdClient ='',findClient(), backClient = false ">Voltar</button>
+
+
           <!-- Modal Create -->
               <div :class="{modal: true, 'is-active':showModalCreate}">
                   <div class="modal-background">
@@ -77,6 +89,8 @@
                               </div>
                       <p>Nome</p>
                       <input type="text" v-model="showModalData.nomecli" placeholder="digite o nome do usuário" class="input">
+                      <p>CPF</p>
+                      <input type="text" v-model="showModalData.cpf" placeholder="digite o nome do usuário" class="input">
                       <p>Endereço</p>
                       <input type="text" v-model="showModalData.endcli" placeholder="digite o endereço" class="input">
                       <p>Fone</p>
@@ -109,6 +123,8 @@
                         </div> 
                         <p>Nome</p>
                         <input type="text" v-model="showModalDataEdit.nomecli" class="input">
+                        <p>CPF</p>
+                        <input type="text" v-model="showModalDataEdit.cpf" class="input">
                         <p>Endereço</p>
                         <input type="text" v-model="showModalDataEdit.endcli"   class="input">
                         <p>Fone</p>
@@ -159,7 +175,10 @@ export default {
       showedMenuRel: false,
       showModalCreate: false,
       showModalEdit: false,
+      findIdClient: '',
+      backClient: false,
       showModalData: {
+        cpf: '',
         nomecli: '',
         endcli: '',
         foneclie: '',
@@ -183,6 +202,7 @@ export default {
     showMenuRel(){
       this.showedMenuRel = !this.showedMenuRel
     },
+    // Function to print client
     printClient (){
         axios.get("http://localhost:8686/print/client", { responseType: 'blob' })
           .then(res => {
@@ -201,6 +221,7 @@ export default {
       axios.post("http://localhost:8686/client", this.showModalData).then( res => {
           console.log(res)
           this.showSuccessMessage = true;
+          this.showModalData.cpf = '';
           this.showModalData.nomecli = '';
           this.showModalData.endcli = '';
           this.showModalData.foneclie = '';
@@ -228,6 +249,7 @@ export default {
     editClient(user){
       this.showModalDataEdit = {
         idcli: user.idcli,
+        cpf: user.cpf,
         nomecli: user.nomecli,
         endcli: user.endcli,
         foneclie: user.foneclie,
@@ -271,10 +293,63 @@ export default {
           console.log(err)
         })
       }
-    }
+    }, 
+    findIdName(users, findIdClient){
+     
+      
+      for (const key in users){
+        if(Object.prototype.hasOwnProperty.call(users, key)) {
+          const element = users[key];
+          console.log("elementos")
+          console.log(element.cpf)
+     
+          if(element.cpf === findIdClient ){
+            console.log(element.idcli)
+            return element.idcli
+          } 
+      }
+      }
+    },
+    findClient(){
+        if(this.findIdClient.trim() ===   ''){
+          this.fetchClient()  
+        }else {
+          const idEncontrado = this.findIdName(this.users,this.findIdClient )
+          if (idEncontrado !== null){
+            axios.get("http://localhost:8686/client/" + idEncontrado)
+              .then(res => {
+                this.backClient = true; 
+                console.log(res);
+                // Atualiza a propriedade users com o cliente encontrado
+                this.users = [res.data];
+              
+              })
+              .catch(err => {
+                console.log(err);
+                alert("Cliente não encontrado!")
+                this.findIdClient = '';
+                this.fetchClient()  
+              
+                // Limpa a tabela se o cliente não for encontrado
+              
+              });
+          }else {
+            this.users = []
+          }
+        }
+      },
   }
 }
+
+
+
+ 
+       
+
 </script>
+<style>
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
+</style>
 <style scoped>
 
 h1 {

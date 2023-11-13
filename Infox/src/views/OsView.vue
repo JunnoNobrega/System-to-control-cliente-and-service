@@ -20,8 +20,9 @@
         </nav>
         <section class="section">
           <label for=""><h4> Busca Ordens de serviços</h4></label><br>
-          <input type="text" placeholder="Buscar Ordens de serviços cadastrados" class="input ">
-          <button class="button is-info is-fullwidth">Buscar</button>
+          <input type="text" placeholder="Buscar OS cadastrados" v-model="findIdOs" class="input" >
+          <button class="button is-info is-fullwidth" type="submit" @click="findOs()">Buscar</button>
+          
           <hr>
           <h2 class="cabecalho">Ordens de serviços cadastradas </h2>
           <button class="button is-success is-fullwidth" @click="showModalCreate =true">Cadastrar nova Ordem de serviço</button>
@@ -72,7 +73,7 @@
           </table>
           <button class="button is-success" @click="showModalCreate =true">Cadastrar novo</button>
           <button class="button is-focused" @click="printAllOs()">Gerar relatório</button>
-            
+          <button v-if="backButton" class="button is-focused" @click="findIdOs ='',fetchClient(), backButton = false ">Voltar</button>
 
           <!-- Modal create -->
                 <div :class="{modal: true, 'is-active is-fullwidth':showModalCreate}">
@@ -216,6 +217,7 @@
         axios.get("http://localhost:8686/client").then(res =>{
           this.arrayDataName = res.data
           console.log(this.arrayDataName)
+          console.log(this.arrayDataName)
           const names = this.arrayDataName.map(objeto => objeto.nomecli)
           console.log(names)
           })
@@ -228,6 +230,8 @@
         name: '',
         namecli: '',
         oss: [],
+        findIdOs: '',
+        backButton: false,
         showedMenuCad: false,
         showedMenuRel: false,
         showModalCreate: false,
@@ -399,6 +403,24 @@
           })
         }
       },
+      // Funtion to Find Os by ID
+      findOs(){
+        if (this.findIdOs.trim() ===   '') {
+          this.fetchClient()  
+        } else {
+          
+          axios.get("http://localhost:8686/os/" + this.findIdOs)
+          .then(res =>{
+            this.backButton = true; 
+            this.oss = [res.data];
+          }).catch(err => {
+                  console.log(err);
+                  alert("Os não encontrada!")
+                  this.findIdOs = '';
+                  this.fetchClient()  
+        });
+        }
+      }
     }
   }
 

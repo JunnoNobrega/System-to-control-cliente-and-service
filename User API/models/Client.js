@@ -9,7 +9,7 @@ class Client {
 
     async findAllClient(){
         try {
-            var result = await knex.select(["idcli","nomecli","endcli","foneclie","emailcli"]).table("tbclientes");
+            var result = await knex.select(["idcli" ,"cpf","nomecli","endcli","foneclie","emailcli"]).table("tbclientes");
             return result;
         }catch (err) {
             console.log(err);
@@ -19,7 +19,7 @@ class Client {
     // busca por id
     async findById(idcli){
         try {
-            var result = await knex.select(["idcli","nomecli","endcli","foneclie","emailcli"]).where({idcli: idcli}).table("tbclientes");
+            var result = await knex.select(["idcli","cpf","nomecli","endcli","foneclie","emailcli"]).where({idcli: idcli}).table("tbclientes");
             
             if(result.length > 0){
                 return result[0];
@@ -34,7 +34,7 @@ class Client {
     // buscar por nome
     async findByEmail(emailcli){
         try {
-            var result = await knex.select(["idcli","nomecli","endcli","foneclie","emailcli"]).where({emailcli: emailcli}).table("tbclientes");
+            var result = await knex.select(["idcli","cpf","nomecli","endcli","foneclie","emailcli"]).where({emailcli: emailcli}).table("tbclientes");
             
             if(result.length > 0){
                 return result[0];
@@ -48,10 +48,10 @@ class Client {
     }
 
     // Cadastra os dados no banco de dados utilizando o knex.js
-    async new(nomecli,endcli,foneclie,emailcli) {
+    async new(cpf, nomecli,endcli,foneclie,emailcli) {
 
         try {
-            await knex.insert({ nomecli,endcli,foneclie,emailcli}).table("tbclientes");
+            await knex.insert({ cpf,nomecli,endcli,foneclie,emailcli}).table("tbclientes");
 
         } catch (error) {
             console.log(error);
@@ -75,7 +75,7 @@ class Client {
         }
     }
     // edição de usuário
-    async update(idcli,nomecli,endcli,foneclie,emailcli){
+    async update(idcli , cpf,nomecli,endcli,foneclie,emailcli){
         var user = await this.findById(idcli);
         if (user != undefined) {
             var editUser = {};
@@ -101,6 +101,9 @@ class Client {
             }
             if(foneclie != undefined){
                 editUser.foneclie = foneclie;
+            }
+            if(cpf != undefined){
+                editUser.cpf = cpf;
             }
     
             // atualiza os dados

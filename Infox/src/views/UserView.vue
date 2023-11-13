@@ -23,8 +23,9 @@
         </nav>
         <section class="section">
           <label for=""><h4>  Cadastro de Usuários</h4></label><br>
-          <input type="text" placeholder="Buscar usuários cadastrados" class="input ">
-          <button class="button is-info is-fullwidth">Buscar</button>
+          <input type="text" placeholder="Buscar Usuários cadastrados" v-model="findIdUser" class="input ">
+          <button class="button is-info is-fullwidth" type="submit" @click="findUser()">Buscar</button>
+          
           <hr>
           <table class="table  is-bordered">
               <thead>
@@ -61,7 +62,9 @@
           </table>
           <button class="button is-success" @click="showModalCreate =true">Cadastrar novo usuário</button>
           <button class="button is-focused" @click="printUser()">Gerar relatório</button>
-            <!-- Modal Create -->
+          <button v-if="backButton" class="button is-focused" @click="findIdUser ='',fetchClient(), backButton = false ">Voltar</button>
+  
+          <!-- Modal Create -->
                 <div :class="{modal: true, 'is-active':showModalCreate}">
                     <div class="modal-background">
                       
@@ -156,6 +159,8 @@
       return{
         name: '',
         users: [],
+        findIdUser: '',
+        backButton: false,
         showedMenuCad: false,
         showedMenuRel: false,
         showModalCreate: false,
@@ -287,9 +292,56 @@
             console.log(err)
           })
         }
-      }
+      },
+      findIdName(users, findIdUser){
+     
+      
+            for (const key in users){
+              if(Object.prototype.hasOwnProperty.call(users, key)) {
+                const element = users[key];
+            
+                if(element.email === findIdUser ){
+                 
+                  return element.id
+                } 
+                if(findIdUser){
+                  return element.id
+                }
+            }
+            }
+      },
+      findUser(){
+
+        if(this.findIdUser.trim() ===   ''){
+          this.fetchClient()  
+        }else {
+          const idEncontrado = this.findIdName(this.users,this.findIdUser )
+
+      
+          if (idEncontrado !== null){
+            axios.get("http://localhost:8686/user/" + idEncontrado)
+              .then(res => {
+                this.backButton = true; 
+                console.log(res);
+                // Atualiza a propriedade users com o cliente encontrado
+                this.users = [res.data];
+              
+              })
+              .catch(err => {
+                console.log(err);
+                alert("Usuário não encontrado!")
+                this.findIdUser = '';
+                this.fetchClient()  
+              
+                // Limpa a tabela se o cliente não for encontrado
+              
+              });
+          }else {
+            this.users = []
+          }
+        }
+      },
     }
-    //acaba aquiiiiiiiiiiiiiiiiiiiiiiiiii
   }
 
   </script>
